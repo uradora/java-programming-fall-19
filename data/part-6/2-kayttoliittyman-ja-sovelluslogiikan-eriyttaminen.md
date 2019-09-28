@@ -8,8 +8,8 @@ hidden: true
 
 <!-- - Tutustut sovelluksen luomiseen siten, että käyttöliittymä ja sovelluslogiikka ovat erillään. -->
 <!-- - Osaat luoda tekstikäyttöliittymän, joka saa parametrinaan sovelluskohtaisen sovelluslogiikan sekä syötteen lukemiseen käytettävän Scanner-olion. -->
- - Understand creating programs so, that the user interface and the application logic are separated
- - Can create a textual user interface, which takes program specific application logic and a Scanner object as parameters
+ - Understand creating programs so that the user interface and the application logic are separated
+ - Can create a textual user interface which takes program specific application logic and a Scanner object as parameters
 
 
 </text-box>
@@ -25,7 +25,7 @@ Write a word: **turnip**
 Write a word: **potato**
 Write a word: **celery**
 Write a word: **potato**
-You wrote the same word twice!
+You gave the same word twice!
 
 </sample-output>
 
@@ -402,36 +402,55 @@ public class UserInterface {
 }
 
 
-/* Jälleen kannattaa testata, että ohjelma toimii edelleen. Voi olla hyödyksi esimerkiksi lisätä kaynnista-metodin loppuun testitulostus, joka varmistaa että syötetyt sanat todella menivät listaan.
- */
+/* Jälleen kannattaa testata, että ohjelma toimii edelleen. Voi olla hyödyksi esimerkiksi lisätä kaynnista-metodin loppuun testitulostus, joka varmistaa että syötetyt sanat todella menivät listaan. */
 Again it is a good idea to test that the program still works. For example, it might be useful to add a test print to the end of the start-method to make sure that the entered words have really been added to the list.
 
-```java
+/* ```java
 // testitulostus joka varmistaa että kaikki toimii edelleen
 for(String sana: this.sanat) {
     System.out.println(sana);
 }
+``` */
+```java
+// test print to check that everything still works
+for (String word: this.words) {
+    System.out.println(word);
+}
 ```
 
-## Osaongelmien ratkaisujen yhdistäminen
+<!-- ## Osaongelmien ratkaisujen yhdistäminen
 
 Muokataan vielä äsken tekemämme metodi `onJoSyotetty` tutkimaan onko kysytty sana jo syötettyjen joukossa, eli listassa.
+ -->
+## Combining the solutions to sub-problems
 
-```java
+Let's change the method 'alreadyEntered' so that it checks whether the entered word is contained in our list of words that have been already entered.
+
+
+<!-- ```java
 public boolean onJoSyotetty(String sana) {
     return this.sanat.contains(sana);
 }
 ```
+ -->
+```java
+public boolean alreadyEntered(String word) {
+    return this.words.contains(word);
+}
+```
+<!-- Nyt sovellus toimii kutakuinkin halutusti.
+ -->
+Now the application works as intended.
 
-Nyt sovellus toimii kutakuinkin halutusti.
-
-
-## Oliot luonnollisena osana ongelmanratkaisua
+<!-- ## Oliot luonnollisena osana ongelmanratkaisua
 
 Rakensimme äsken ratkaisun ongelmaan, missä luetaan käyttäjältä sanoja, kunnes käyttäjä antaa saman sanan uudestaan. Syöte ohjelmalle oli esimerkiksi seuraavanlainen.
+ -->
+## Objects as a natural part of problem solving
 
+We just built a solution to a problem where the program reads words from a user until the user enters a word that has already been entered before. Our example input was as follows:
 
-<sample-output>
+<!-- <sample-output>
 
 Anna sana: **porkkana**
 Anna sana: **selleri**
@@ -440,11 +459,18 @@ Anna sana: **lanttu**
 Anna sana: **selleri**
 Annoit saman sanan uudestaan!
 
-</sample-output>
+</sample-output> -->
+Enter a word: **carrot**
+Enter a word: **celery**
+Enter a word: **turnip**
+Enter a word: **end**
+You gave the same word twice!
 
-Päädyimme ratkaisuun
+<!-- Päädyimme ratkaisuun
+ -->
+We came up with the following solution:
 
-```java
+<!-- ```java
 public class Kayttoliittyma {
     private Scanner lukija;
     private ArrayList<String> sanat;
@@ -475,16 +501,56 @@ public class Kayttoliittyma {
         return this.sanat.contains(sana);
     }
 }
-```
-
-Ohjelman käyttämä apumuuttuja lista `sanat` on yksityiskohta käyttöliittymän kannalta. Käyttöliittymän kannaltahan on oleellista, että muistetaan niiden *sanojen joukko* jotka on nähty jo aiemmin. Sanojen joukko on selkeä erillinen "käsite", tai abstraktio. Tälläiset selkeät käsitteet ovat potentiaalisia olioita; kun koodissa huomataan "käsite" voi sen eristämistä erilliseksi luokaksi harkita.
-
-
-### Sanajoukko
-
-Tehdään luokka `Sanajoukko`, jonka käyttöönoton jälkeen käyttöliittymän metodi `kaynnista` on seuraavanlainen:
-
+``` -->
 ```java
+public class UserInterface {
+    private Scanner scanner;
+    private ArrayList<String> words;
+
+    public UserInterface(Scanner scanner) {
+        this.scanner = scanner;
+        this.words = new ArrayList<String>();
+    }
+
+    public void start() {
+
+        while (true) {
+            System.out.print("Enter a word: ");
+            String word = scanner.nextLine();
+
+            if (alreadyEntered(word)) {
+                break;
+            }
+
+            // adding the word to the list of previous words
+            this.words.add(word);
+
+        }
+
+        System.out.println("You gave the same word twice!");
+    }
+
+    public boolean alreadyEntered(String word) {
+       if (word.equals("end")) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+
+/* Ohjelman käyttämä apumuuttuja lista `sanat` on yksityiskohta käyttöliittymän kannalta. Käyttöliittymän kannaltahan on oleellista, että muistetaan niiden *sanojen joukko* jotka on nähty jo aiemmin. Sanojen joukko on selkeä erillinen "käsite", tai abstraktio. Tälläiset selkeät käsitteet ovat potentiaalisia olioita; kun koodissa huomataan "käsite" voi sen eristämistä erilliseksi luokaksi harkita.*/
+From the point of view of the user interface, the support variable 'words' is just a detail. The main thing is that the user interface remembers the *set of words* that have been entered before. The set is a clear distinct "concept" or an abstraction. Distinct concepts like this are all potential objects: when we notice that we have an abstraction like this in our code, we can think about separating the concept into a class of its own.
+
+/* ### Sanajoukko
+
+Tehdään luokka `Sanajoukko`, jonka käyttöönoton jälkeen käyttöliittymän metodi `kaynnista` on seuraavanlainen:*/
+### Wordset
+
+ Let's make a class called 'Wordset'. After implenting the class, the user interface's start method looks like this:
+
+/* ```java
 while (true) {
     String sana = lukija.nextLine();
 
@@ -496,15 +562,34 @@ while (true) {
 }
 
 System.out.println("Annoit saman sanan uudestaan!");
+```*/
+```java
+while (true) {
+    String word = scanner.nextLine();
+
+    if (words.contains(word)) {
+        break;
+    }
+
+    wordset.add(word);
+}
+
+System.out.println("You gave the same word twice!");
 ```
 
-Käyttöliittymän kannalta Sanajoukolla kannattaisi siis olla metodit `boolean sisaltaa(String sana)` jolla tarkastetaan sisältyykö annettu sana jo sanajoukkoon ja `void lisaa(String sana)` jolla annettu sana lisätään joukkoon.
+<!-- Käyttöliittymän kannalta Sanajoukolla kannattaisi siis olla metodit `boolean sisaltaa(String sana)` jolla tarkastetaan sisältyykö annettu sana jo sanajoukkoon ja `void lisaa(String sana)` jolla annettu sana lisätään joukkoon.
 
 Huomaamme, että näin kirjoitettuna käyttöliittymän luettavuus on huomattavasti parempi.
 
 Luokan `Sanajoukko` runko näyttää seuraavanlaiselta:
+ -->
+From the point of view of the user interface, the class Wordset should contain the method 'boolean contains(String word)', that checks whether the given word is contained in our set of words, and the method 'void add(String word)', that adds the given word into the set.
 
-```java
+We notice that the readability of the user interface is greatly improved when it's written like this.
+
+The outline for the class 'Wordset' looks like this:
+
+<!-- ```java
 public class Sanajoukko {
     // oliomuuttuja(t)
 
@@ -521,14 +606,36 @@ public class Sanajoukko {
         // lisaa-metodin toteutus
     }
 }
+``` -->
+```java
+public class Wordset {
+    // object variable(s)
+
+    public Wordset() {
+        // constructor
+    }
+
+    public boolean contains(String word) {
+        // contains-method implementation
+        return false;
+    }
+
+    public void add(String word) {
+        // add-method implementation
+    }
+}
 ```
 
-
-### Toteutus aiemmasta ratkaisusta
+<!-- ### Toteutus aiemmasta ratkaisusta
 
 Voimme toteuttaa sanajoukon siirtämällä aiemman ratkaisumme listan sanajoukon oliomuuttujaksi:
+ -->
 
-```java
+### Implementation from an earlier solution
+
+We can implement the set of words by making our earlier solution, the list, into an object variable:
+
+<!-- ```java
 import java.util.ArrayList;
 
 public class Sanajoukko {
@@ -546,13 +653,35 @@ public class Sanajoukko {
         return this.sanat.contains(sana);
     }
 }
-```
-
-Ratkaisu on nyt melko elegantti. Erillinen käsite on saatu erotettua ja käyttöliittymä näyttää siistiltä. Kaikki "likaiset yksityiskohdat" on saatu siivottua eli kapseloitua olion sisälle.
-
-Muokataan käyttöliittymää niin, että se käyttää Sanajoukkoa. Sanajoukko annetaan käyttöliittymälle samalla tavalla parametrina kuin Scanner.
-
+``` -->
 ```java
+import java.util.ArrayList;
+
+public class Wordset {
+    private ArrayList<String> words
+
+    public Wordset() {
+        this.words = new ArrayList<>();
+    }
+
+    public void add(String word) {
+        this.words.add(word);
+    }
+
+    public boolean contains(String word) {
+        return this.words.contains(word);
+    }
+}
+
+
+/* Ratkaisu on nyt melko elegantti. Erillinen käsite on saatu erotettua ja käyttöliittymä näyttää siistiltä. Kaikki "likaiset yksityiskohdat" on saatu siivottua eli kapseloitua olion sisälle.
+
+Muokataan käyttöliittymää niin, että se käyttää Sanajoukkoa. Sanajoukko annetaan käyttöliittymälle samalla tavalla parametrina kuin Scanner.*/
+Now our solution is quite elegant. We have separated a distinct concept into a class and our user interface looks clean. All "dirty details" have been encapsulated neatly inside an object.
+
+Let's now edit the user interface so that it uses the class Words. The class is given to the user interface as a parameter, just like Scanner.
+
+/* ```java
 public class Kayttoliittyma {
     private Sanajoukko sanajoukko;
     private Scanner lukija;
@@ -578,11 +707,40 @@ public class Kayttoliittyma {
         System.out.println("Annoit saman sanan uudestaan!");
     }
 }
+``` */
+```java
+public class UserInterface {
+    private Wordset wordset;
+    private Scanner scanner;
+
+    public userInterface(Wordset wordset, Scanner scanner) {
+        this.wordset = wordset;
+        this.scanner = scanner;
+    }
+
+    public void start() {
+
+        while (true) {
+            System.out.print("Enter a word: ");
+            String word = scanner.nextLine();
+
+            if (this.wordset.contains(word)) {
+                break;
+            }
+
+            this.wordset.add(word);
+        }
+
+        System.out.println("You gave the same word twice!");
+    }
+}
 ```
 
-Ohjelman käynnistäminen tapahtuu nyt seuraavasti:
+<!-- Ohjelman käynnistäminen tapahtuu nyt seuraavasti:
+ -->
+Starting the program is now done as follows:
 
-```java
+<!-- ```java
 public static void main(String[] args) {
     Scanner lukija = new Scanner(System.in);
     Sanajoukko joukko = new Sanajoukko();
@@ -590,9 +748,18 @@ public static void main(String[] args) {
     Kayttoliittyma kayttoliittyma = new Kayttoliittyma(joukko, lukija);
     kayttoliittyma.kaynnista();
 }
+``` -->
+```java
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    Wordset set = new Wordset();
+
+    UserInterface userinterface = new UserInterface(set, scanner);
+    userinterface.start();
+}
 ```
 
-## Luokan sisäisen toteutuksen muuttaminen
+<!-- ## Luokan sisäisen toteutuksen muuttaminen
 
 Olemme päätyneet tilanteeseen missä `Sanajoukko` ainoastaan "kapseloi" ArrayList:in. Onko tässä järkeä? Kenties. Voimme nimittäin halutessamme tehdä Sanajoukolle muitakin muutoksia. Ennen pitkään saatamme esim. huomata, että sanajoukko pitää tallentaa tiedostoon. Jos tekisimme nämä muutokset Sanajoukkoon muuttamatta käyttöliittymän käyttävien metodien nimiä, ei käyttöliittymää tarvitsisi muuttaa mitenkään.
 
@@ -603,6 +770,20 @@ Oleellista on tässä se, että Sanajoukko-luokkaan tehdyt sisäiset muutokset e
 
 Voi olla, että jatkossa ohjelmaa halutaan laajentaa siten, että `Sanajoukko`-luokan olisi osattava uusia asiota. Jos ohjelmassa haluttaisiin esimerkiksi tietää kuinka moni syötetyistä sanoista oli palindromi, voidaan sanajoukkoa laajentaa metodilla `palindromeja`.
 
+ -->
+## Changing the implementation of a class
+
+We have arrived into a situation where the class 'Wordset' "encapsulates" an ArrayList. Is this reasonable? Perhaps. This is because we can make other changes to the class if we so desire, and before long we might arrive into a situation where the wordset has to be, for example, saved into a file. If we make all these changes inside the class Wordset without changing the names of the methods that the user interface uses, we don't have to modify the actual user interface at all.
+
+The main point here is that changes made inside the class Wordset don't affect the class UserInterface. This is because the user interface uses Wordset through the methods that it provides -- these are called its public interfaces.
+
+
+## Implementing new functionalities: palindroms
+
+In the future, we might want to augment the program so that the class 'Wordset' offers some new functionalities. If, for example, we wanted to know how many of the entered words were palindroms, we could add a method called 'palindroms' into the program.
+
+
+<!--
 ```java
 public void kaynnista() {
 
@@ -620,10 +801,29 @@ public void kaynnista() {
     System.out.println("Annoit saman sanan uudestaan!");
     System.out.println("Sanoistasi " + this.sanajoukko.palindromeja() + " oli palindromeja");
 }
+``` -->
+```java
+public void start() {
+
+    while (true) {
+        System.out.print("Enter a word: ");
+        String word = scanner.nextLine();
+
+        if (this.wordset.contains(word)) {
+            break;
+        }
+
+        this.wordset.add(word);
+    }
+
+    System.out.println("You gave the same word twice!");
+    System.out.println(this.wordset.palindroms() + " of the words were palindroms.");
+}
 ```
 
-Käyttöliittymä säilyy siistinä ja palindromien laskeminen jää `Sanajoukko`-olion huoleksi. Metodin toteutus voisi olla esimerkiksi seuraavanlainen.
-
+<!-- Käyttöliittymä säilyy siistinä ja palindromien laskeminen jää `Sanajoukko`-olion huoleksi. Metodin toteutus voisi olla esimerkiksi seuraavanlainen.
+ -->
+The user interface remains clean, because counting the palindroms is done inside the object 'Wordset'. The following is an example implementation of the method.
 
 ```java
 import java.util.ArrayList;
