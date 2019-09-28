@@ -4,17 +4,31 @@ title: 'Olioita listalla ja listan sisältävät oliot'
 hidden: true
 ---
 
-<text-box variant='learningObjectives' name='Oppimistavoitteet'>
+<!-- <text-box variant='learningObjectives' name='Oppimistavoitteet'>
 
 - Kertaat listojen käyttöä.
 - Tiedät, että viittaustyyppisen muuttujan lisääminen listalle kopioi listalle muuttujan viitteen.
 - Osaat käyttää listaa oliomuuttujana.
 
+</text-box> -->
+
+<text-box variant='learningObjectives' name='Learning Objectives'>
+
+- You rehearse using lists.
+- You know that adding a reference variable to a list copies a reference to that variable into the list.
+- You know how to use a list as an object variable.
+
 </text-box>
 
-Tutustutaan seuraavaksi olioihin, jonka sisältävät listan. Tällaisia olioita ovat esimerkiksi joukkoja kuvaavat oliot, kuten vaikkapa soittolistat.
+<!-- Tutustutaan seuraavaksi olioihin, jonka sisältävät listan. Tällaisia olioita ovat esimerkiksi joukkoja kuvaavat oliot, kuten vaikkapa soittolistat.
 
 Alla olevassa esimerkissä käsitteelle soittolista on luotu luokka. Soittolista sisältää kappaleita: siihen voi lisätä kappaleita, siitä voi poistaa kappaleita, ja siinä olevat kappaleet voi tulostaa.
+ -->
+
+ Next, let's have a look at objects that contain a list. Examples of objects like these include objects that describe sets, for example playlists.
+
+ In the following example, we have made a class for the concept of a playlist. The playlist contains songs: songs can be added, songs can be removed, and the songs that the playlist contains can be printed.
+
 
 ```java
 // importit

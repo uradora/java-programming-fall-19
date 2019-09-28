@@ -34,10 +34,10 @@ Let's build this program piece by piece. One of the challenges is, that it is di
 There is no one clear answer -- sometimes it is good to start from the problem domain and its concepts and their connections, sometimes it is better to start from the user interface.
 
 <!-- Käyttöliittymän hahmottelu voisi lähteä liikenteeseen luokasta Kayttoliittyma. Käyttöliittymä käyttää syötteen lukemiseen Scanner-oliota, joka annetaan sille käyttöliittymän luonnin yhteydessä. Tämän lisäksi käyttöliittymällä on käynnistämiseen tarkoitettu metodi. -->
-We could start implementing the user interface by creating a class UserInterface. The user interface uses a Scanner object for reading user input. This object is given to the User Interface
+We could start implementing the user interface by creating a class UserInterface. The user interface uses a Scanner object for reading user input. This object is given to the User Interface as the interface is created. In addition to this, the user interface has a separate method for starting up the interface.
 
 
-```java
+<!-- ```java
 public class Kayttoliittyma {
     private Scanner lukija;
 
@@ -49,26 +49,49 @@ public class Kayttoliittyma {
         // tehdään jotain
     }
 }
+``` -->
+```java
+public class UserInterface {
+    private Scanner scanner;
+
+    public UserInterface(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public void start() {
+        // do something
+    }
+}
 ```
 
-Käyttöliittymän luominen ja käynnistäminen onnistuu seuraavasti.
+<!-- Käyttöliittymän luominen ja käynnistäminen onnistuu seuraavasti.
+ -->
+ Creating and starting up a user interface can be done as follows.
 
-
-```java
+<!-- ```java
 public static void main(String[] args) {
     Scanner lukija = new Scanner(System.in);
     Kayttoliittyma kayttoliittyma = new Kayttoliittyma(lukija);
     kayttoliittyma.kaynnista();
 }
+``` -->
+```java
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    UserInterface userinterface = new userinterface(scanner);
+    userinterface.start();
+}
 ```
 
-
-## Toisto ja lopetus
+<!-- ## Toisto ja lopetus
 
 Ohjelmassa on (ainakin) kaksi "aliongelmaa". Ensimmäinen on sanojen toistuva lukeminen käyttäjältä kunnes tietty ehto toteutuu. Tämä voitaisiin hahmotella seuraavaan tapaan.
+ -->
+## Looping and quitting
 
+This program has (at least) two "sub-problems". The first problem is continuously reading words from the user until a certain condition is reached. We can outline this as follows.
 
-```java
+<!-- ```java
 public class Kayttoliittyma {
     private Scanner lukija;
 
@@ -91,11 +114,37 @@ public class Kayttoliittyma {
         System.out.println("Annoit saman sanan uudestaan!");
     }
 }
+``` -->
+```java
+public class UserInterface {
+    private Scanner scanner;
+
+    public UserInterface(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public void start() {
+
+        while (true) {
+            System.out.print("Enter a word: ");
+            String word = scanner.nextLine();
+
+            if (*stop condition*) {
+                break;
+            }
+
+        }
+
+        System.out.println("You gave the same word twice!");
+    }
+}
 ```
 
-Sanojen kysely jatkuu kunnes käyttäjä syöttää jo aiemmin syötetyn sanan. Täydennetään ohjelmaa siten, että se tarkastaa onko sana jo syötetty. Vielä ei tiedetä miten toiminnallisuus kannattaisi tehdä, joten tehdään siitä vasta runko.
+<!-- Sanojen kysely jatkuu kunnes käyttäjä syöttää jo aiemmin syötetyn sanan. Täydennetään ohjelmaa siten, että se tarkastaa onko sana jo syötetty. Vielä ei tiedetä miten toiminnallisuus kannattaisi tehdä, joten tehdään siitä vasta runko.
+ -->
+The program continues to ask for words until the user enters a word that has already been entered before. Let us modify the program so that it checks whether the word has been entered or not. We don't know yet how to implement this functionality, so let us first build an outline for it.
 
-```java
+<!-- ```java
 public class Kayttoliittyma {
     private Scanner lukija;
 
@@ -124,11 +173,43 @@ public class Kayttoliittyma {
         return false;
     }
 }
+``` -->
+```java
+public class UserInterface {
+    private Scanner scanner;
+
+    public UserInterface(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public void start() {
+
+        while (true) {
+            System.out.print("Enter a word: ");
+            String word = scanner.nextLine();
+
+            if (alreadyEntered(word)) {
+                break;
+            }
+
+        }
+
+        System.out.println("You gave the same word twice!");
+    }
+
+    public boolean alreadyEntered(String word) {
+        // do something here
+
+        return false;
+    }
+}
 ```
 
-Ohjelmaa on hyvä testata koko ajan, joten tehdään metodista kokeiluversio:
+<!-- Ohjelmaa on hyvä testata koko ajan, joten tehdään metodista kokeiluversio:
+ -->
+It's a good idea to test the program continuously, so let's make a test version of the method:
 
-```java
+<!-- ```java
 public boolean onJoSyotetty(String sana) {
     if (sana.equals("loppu")) {
         return true;
@@ -136,11 +217,22 @@ public boolean onJoSyotetty(String sana) {
 
     return false;
 }
+``` -->
+```java
+public boolean alreadyEntered(String word) {
+    if (word.equals("end")) {
+        return true;
+    }
+
+    return false;
+}
 ```
 
-Nyt toisto jatkuu niin kauan kunnes syötteenä on sana loppu:
+<!-- Nyt toisto jatkuu niin kauan kunnes syötteenä on sana loppu:
+ -->
+Now the loop continues until the input equals the word "end":
 
-<sample-output>
+<!-- <sample-output>
 
 Anna sana: **porkkana**
 Anna sana: **selleri**
@@ -149,16 +241,31 @@ Anna sana: **lanttu**
 Anna sana: **loppu**
 Annoit saman sanan uudestaan!
 
+</sample-output> -->
+<sample-output>
+
+Enter a word: **carrot**
+Enter a word: **celery**
+Enter a word: **turnip**
+Enter a word: **end**
+You gave the same word twice!
+
 </sample-output>
 
-Ohjelma ei toimi vielä kokonaisuudessaan, mutta ensimmäinen osaongelma eli ohjelman pysäyttäminen kunnes tietty ehto toteutuu on saatu toimimaan.
+<!-- Ohjelma ei toimi vielä kokonaisuudessaan, mutta ensimmäinen osaongelma eli ohjelman pysäyttäminen kunnes tietty ehto toteutuu on saatu toimimaan.
+ -->
+The program doesn't completely work yet, but the first sub-problem - quitting the loop when a certain condition has been reached - has now been implemented.
 
-
-## Oleellisten tietojen tallentaminen
+<!-- ## Oleellisten tietojen tallentaminen
 
 Toinen osaongelma on aiemmin syötettyjen sanojen muistaminen. Lista sopii mainiosti tähän tarkoitukseen.
+ -->
 
-```java
+## Storing relevant information
+
+Another sub-problem is remembering the words that have already been entered. A list is a good structure for this purpose.
+
+<!-- ```java
 public class Kayttoliittyma {
     private Scanner lukija;
     private ArrayList<String> sanat;
@@ -170,10 +277,26 @@ public class Kayttoliittyma {
 
     //...
 }
+``` -->
+```java
+public class UserInterface {
+    private Scanner scanner;
+    private ArrayList<String> words;
+
+    public UserInterface(Scanner scanner) {
+        this.scanner = scanner;
+        this.words = new ArrayList<String>();
+    }
+
+    //...
+}
 ```
 
-Kun uusi sana syötetään, on se lisättävä syötettyjen sanojen joukkoon. Tämä tapahtuu lisäämällä while-silmukkaan listan sisältöä päivittävä rivi:
+<!-- Kun uusi sana syötetään, on se lisättävä syötettyjen sanojen joukkoon. Tämä tapahtuu lisäämällä while-silmukkaan listan sisältöä päivittävä rivi:
+ -->
+When a new word is entered, it has to be added into the list of words that have been entered before. This is done by adding a line that updates our list to the while-loop:
 
+<!--
 ```java
 while (true) {
     System.out.print("Anna sana: ");
@@ -186,11 +309,26 @@ while (true) {
     // lisätään uusi sana aiempien sanojen listaan
     this.sanat.add(sana);
 }
+``` -->
+```java
+while (true) {
+    System.out.print("Enter a word: ");
+    String word = scanner.nextLine();
+
+    if (alreadyEntered(word)) {
+        break;
+    }
+
+    // adding the word to the list of previous words
+    this.words.add(word);
+}
 ```
 
-Kayttoliittyma näyttää kokonaisuudessaan seuraavalta.
+<!-- Kayttoliittyma näyttää kokonaisuudessaan seuraavalta.
+ -->
+The whole user interface looks as follows.
 
-```java
+<!-- ```java
 public class Kayttoliittyma {
     private Scanner lukija;
     private ArrayList<String> sanat;
@@ -225,9 +363,48 @@ public class Kayttoliittyma {
         return false;
     }
 }
-```
+``` -->
+```java
+public class UserInterface {
+    private Scanner scanner;
+    private ArrayList<String> words;
 
-Jälleen kannattaa testata, että ohjelma toimii edelleen. Voi olla hyödyksi esimerkiksi lisätä kaynnista-metodin loppuun testitulostus, joka varmistaa että syötetyt sanat todella menivät listaan.
+    public UserInterface(Scanner scanner) {
+        this.scanner = scanner;
+        this.words = new ArrayList<String>();
+    }
+
+    public void start() {
+
+        while (true) {
+            System.out.print("Enter a word: ");
+            String word = scanner.nextLine();
+
+            if (alreadyEntered(word)) {
+                break;
+            }
+
+            // adding the word to the list of previous words
+            this.words.add(word);
+
+        }
+
+        System.out.println("You gave the same word twice!");
+    }
+
+    public boolean alreadyEntered(String word) {
+       if (word.equals("end")) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+
+/* Jälleen kannattaa testata, että ohjelma toimii edelleen. Voi olla hyödyksi esimerkiksi lisätä kaynnista-metodin loppuun testitulostus, joka varmistaa että syötetyt sanat todella menivät listaan.
+ */
+Again it is a good idea to test that the program still works. For example, it might be useful to add a test print to the end of the start-method to make sure that the entered words have really been added to the list.
 
 ```java
 // testitulostus joka varmistaa että kaikki toimii edelleen
