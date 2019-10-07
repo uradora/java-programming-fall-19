@@ -825,7 +825,7 @@ public void start() {
  -->
 The user interface remains clean, because counting the palindroms is done inside the object 'Wordset'. The following is an example implementation of the method.
 
-```java
+<!-- ```java
 import java.util.ArrayList;
 
 public class Sanajoukko {
@@ -872,20 +872,73 @@ public class Sanajoukko {
         return true;
     }
 }
+``` -->
+```java
+import java.util.ArrayList;
+
+public class Wordset {
+    private ArrayList<String> words;
+
+    public Wordset() {
+        this.words = new ArrayList<>();
+    }
+
+    public boolean contains(String word) {
+        return this.words.contains(word);
+    }
+
+    public void add(String word) {
+        this.words.add(word);
+    }
+
+    public int palindroms() {
+        int count = 0;
+
+        for (String word: this.words) {
+            if (isPalindrom(word)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    public boolean isPalindrom(String word) {
+        int end = word.length() - 1;
+
+        int i = 0;
+        while (i < word.length() / 2) {
+            // method charAt returns the character at given index
+            // as a simple variable
+            if(word.charAt(i) != word.charAt(end - i)) {
+                return false;
+            }
+
+            i++;
+        }
+
+        return true;
+    }
+}
 ```
 
-Metodissa `palindromeja` käytetään apumetodia `onPalindromi`, joka tarkastaa onko sille parametrina annettu sana palindromi.
+<!-- Metodissa `palindromeja` käytetään apumetodia `onPalindromi`, joka tarkastaa onko sille parametrina annettu sana palindromi.
+ -->
+The method 'palindroms' uses the variable 'isPalindrom' to check whether the word that's given to it as a parameter is, in fact, a palindrom.
 
-
-
-<text-box variant='hint' name='Uusiokäyttö'>
+<!-- <text-box variant='hint' name='Uusiokäyttö'>
 
 Kun ohjelmakoodin käsitteet on eriytetty omiksi luokikseen, voi niitä uusiokäyttää helposti muissa projekteissa. Esimerkiksi luokkaa `Sanajoukko` voisi käyttää yhtä hyvin graafisesta käyttöliittymästä, ja se voisi myös olla osa kännykässä olevaa sovellusta. Tämän lisäksi ohjelman toiminnan testaaminen on huomattavasti helpompaa silloin kun ohjelma on jaettu erillisiin käsitteisiin, joita kutakin voi käyttää myös omana itsenäisenä yksikkönään.
 
 </text-box>
+ -->
+<text-box variant='hint' name='Recycling'>
 
+When concepts have been separated into different classes in the code, recycling them and reusing them in other projects becomes easy. For example, the class 'Wordset' could be well be used in a graphical user interface, and it could also part of a mobile phone application. In addition, testing the program is much easier when it has been divided into several concepts, each of which has its own separate logic and can function alone as a unit.
 
-## Neuvoja ohjelmointiin
+</text-box>
+
+<!-- ## Neuvoja ohjelmointiin
 
 Yllä kuvatussa laajemmassa esimerkissä noudatettiin seuraavia neuvoja.
 
@@ -906,9 +959,30 @@ Yllä kuvatussa laajemmassa esimerkissä noudatettiin seuraavia neuvoja.
 - Astu tarvittaessa askel taaksepäin ja mieti kokonaisuutta. Jos ohjelma ei toimi, voi olla hyvä idea palata aiemmin toimineeseen tilaan. Käänteisesti voidaan sanoa, että rikkinäinen ohjelma korjaantuu harvemmin lisäämällä siihen lisää koodia.
 
 Ohjelmoijat noudattavat näitä käytänteitä sen takia että ohjelmointi olisi helpompaa. Käytänteiden noudattaminen tekee myös ohjelmien lukemisesta, ylläpitämisestä ja muokkaamisesta helpompaa muille.
+ -->
+## Programming tips
+
+In the larger example above, we were following the advice given here.
 
 
-<programming-exercise name='Sanakirja (4 osaa)' tmcname='osa06-Osa06_09.Sanakirja'>
+-  Proceed with small steps
+    -  Try to separate the program into several sub-problems and **work on only one sub-problem at a time**
+    -  Always test that the program code is advancing in the right direction, in other words: test that the solution to the sub-problem is correct
+    -  Recognize the conditions that require the program to work differently. In the example above, we needed a different functionality to test whether a word had been already entered before.
+
+-  Write as "clean" code as possible
+    -  Indent your code
+    -  Use descriptive method and variable names
+    -  Don't make your methods too long, not even the main method
+    -  Do only one thing inside one method
+    -  **Remove all copy-paste code**
+    -  Replace the "bad" and unclean parts of your code with clean code
+
+-  If needed, take a step back and assess the program as a whole. If it doesn't work, it might be a good idea to return into a previous state where the code still worked. As a corollary, we might say that a program that's broken is rarely fixed by adding more code to it.
+
+Programmers follow these conventions so that programming can be made easier. Following them also makes it easier to read programs, to keep them up, and to edit them in teams.
+
+<programming-exercise name='Dictionary (4 parts)' tmcname='part06-Part06_09.Dictionary'>
 
 Tehtäväpohjassa on valmiiksi annettuna luokka `Sanakirja`, joka tarjoaa toiminnallisuuden sanojen ja niiden käännösten tallentamiseen. Vaikka luokan sisäisessä totetuksessa on asioita, joita kurssilla ei ole käsitelty, on sen käyttö suoraviivaista:
 
@@ -1059,7 +1133,7 @@ Hei hei!
 </programming-exercise>
 
 
-<programming-exercise name='Tehtavalista (2 osaa)' tmcname='osa06-Osa06_10.Tehtavalista'>
+<programming-exercise name='Tasklist (2 parts)' tmcname='part06-Part06_10.Tasklist'>
 
 Tässä tehtävässä tehdään sovellus tehtävälistan luomiseen ja käsittelyyn. Lopullinen sovellus tulee toimimaan seuraavalla tavalla.
 
@@ -1194,12 +1268,13 @@ Huom! Käyttöliittymän tulee käyttää sille parametrina annettua tehtäväli
 </programming-exercise>
 
 
-## Sovelluksesta osakokonaisuuksiin
+<!-- ## Sovelluksesta osakokonaisuuksiin
 
 
 Tarkastellaan ohjelmaa, joka kysyy käyttäjältä koepisteitä, muuntaa ne arvosanoiksi, ja lopulta tulostaa kurssin arvosanajakauman tähtinä. Ohjelma lopettaa lukemisen kun käyttäjä syöttää tyhjän merkkijonon. Ohjelman käyttö näyttää seuraavalta:
-
-
+ -->
+Let's examine a program that asks the user to input exam points and turns them into grades. Finally, the program prints the distribution of the grades as stars. The program stops reading inputs when the user inputs an empty string. An example program looks as follows:
+<!--
 <sample-output>
 
 Syötä koepisteet: **91**
@@ -1225,11 +1300,39 @@ Syötä koepisteet:
 1: \*\*\*
 0: \*\*
 
+</sample-output> -->
+<sample-output>
+
+Input exam points: **91**
+Input exam points: **98**
+Input exam points: **103**
+Invalid number.
+Input exam points: **90**
+Input exam points: **89**
+Input exam points: **89**
+Input exam points: **88**
+Input exam points: **72**
+Input exam points: **54**
+Input exam points: **55**
+Input exam points: **51**
+Input exam points: **49**
+Input exam points: **48**
+Input exam points:
+
+5: \*\*\*
+4: \*\*\*
+3: \*
+2:
+1: \*\*\*
+0: \*\*
+
 </sample-output>
 
-Kuten lähes kaikki ohjelmat, ohjelman voi kirjoittaa yhtenä kokonaisuutena mainiin. Eräs mahdollinen toteutus on seuraavanlainen.
+<!-- Kuten lähes kaikki ohjelmat, ohjelman voi kirjoittaa yhtenä kokonaisuutena mainiin. Eräs mahdollinen toteutus on seuraavanlainen.
+ -->
+As almost all programs, this program can be written into main as one entity. Here is one possibility.
 
-```java
+<!-- ```java
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -1293,18 +1396,90 @@ public class Ohjelma {
         }
     }
 }
+``` -->
+```java
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Program {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        ArrayList<Integer> grades = new ArrayList<>();
+
+        while (true) {
+            System.out.print("Input grades: ");
+            String input = scanner.nextLine();
+            if (input.equals("")) {
+                break;
+            }
+
+            int score = Integer.valueOf(input);
+
+            if (score < 0 || score > 100) {
+                System.out.println("Invalid number.");
+                continue;
+            }
+
+            int grade = 0;
+            if (score < 50) {
+                grade = 0;
+            } else if (score < 60) {
+                grade = 1;
+            } else if (score < 70) {
+                grade = 2;
+            } else if (score < 80) {
+                grade = 3;
+            } else if (score < 90) {
+                grade = 4;
+            } else {
+                grade = 5;
+            }
+
+            grades.add(grade);
+        }
+
+        System.out.println("");
+        int grade = 5;
+        while (grade >= 0) {
+            int stars = 0;
+            for (int received: grades) {
+                if (received == grade) {
+                    stars++;
+                }
+            }
+
+            System.out.print(grade + ": ");
+            while (stars > 0) {
+                System.out.print("*");
+                stars--;
+            }
+            System.out.println("");
+
+            grade = grade - 1;
+        }
+    }
+}
 ```
 
-Pilkotaan ohjelma pienempiin osiin. Ohjelman pilkkominen tapahtuu tunnistamalla ohjelmasta vastuualueita. Arvosanojen kirjanpito, mukaanlukien pisteiden muunnos arvosanoiksi, voisi olla erillisen luokan vastuulla. Tämän lisäksi käyttöliittymälle voidaan luoda oma luokkansa.
+<!-- Pilkotaan ohjelma pienempiin osiin. Ohjelman pilkkominen tapahtuu tunnistamalla ohjelmasta vastuualueita. Arvosanojen kirjanpito, mukaanlukien pisteiden muunnos arvosanoiksi, voisi olla erillisen luokan vastuulla. Tämän lisäksi käyttöliittymälle voidaan luoda oma luokkansa.
+ -->
+Let's separate the program into smaller chunks. This can be done by identifying several discrete areas of responsibility within the program. Keeping track of grades, including converting scores into grades, could be done inside a different class. In addition, we could create a new class for the user interface.
 
-
-### Sovelluslogikkka
+<!-- ### Sovelluslogikkka
 
 Sovelluslogiikka sisältää ohjelman toiminnan kannalta oleellisen osat kuten tiedon säilöntätoiminnallisuuden. Edellisestä esimerkistä voidaan tunnistaa arvosanojen säilömiseen tarvittava toiminnallisuus. Eriytetään luokka `Arvosanarekisteri`, jonka vastuulle tulee kirjanpito arvosanojen lukumääristä. Arvosanarekisteriin voidaan lisätä arvosana pisteiden perusteella, jonka lisäksi arvosanarekisteristä voi kysyä kuinka moni on saanut tietyn arvosanan.
 
 Luokka voi näyttää esimerkiksi seuraavalta.
+ -->
+### Program logic
 
-```java
+Program logic includes parts that are crucial for the execution of the program, like functionalities that store information, for example. From the previous example, we can separate the parts that store grade information. From these we can make a class called 'GradeRegister', which is responsible for keeping track of the numbers of different grades students have received. In the register, we can add grades according to scores. In addition, we can use the register to ask how many people have received a certain grade.
+
+An example class follows.
+
+<!-- ```java
 import java.util.ArrayList;
 
 public class Arvosanarekisteri {
@@ -1350,9 +1525,58 @@ public class Arvosanarekisteri {
         return arvosana;
     }
 }
+``` -->
+```java
+import java.util.ArrayList;
+
+public class GradeRegister {
+
+    private ArrayList<Integer> grades;
+
+    public GradeRegister() {
+        this.grades = new ArrayList<>();
+    }
+
+    public void addGradeAccordingToPoints(int points) {
+        this.grades.add(pointsToGrades(points));
+    }
+
+    public int howManyReceivedGrade(int grade) {
+        int count = 0;
+        for (int received: this.grades) {
+            if (received == grade) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    public static int pointsToGrades(int points) {
+
+        int grade = 0;
+        if (points < 50) {
+            grade = 0;
+        } else if (points < 60) {
+            grade = 1;
+        } else if (points < 70) {
+            grade = 2;
+        } else if (points < 80) {
+            grade = 3;
+        } else if (points < 90) {
+            grade = 4;
+        } else {
+            grade = 5;
+        }
+
+        return grade;
+    }
+}
 ```
 
-Kun arvosanarekisteri on eriytetty omaksi luokakseen, voidaan siihen liittyvä toiminnallisuus poistaa pääohjelmastamme. Pääohjelman muoto on nyt seuraavanlainen.
+<!-- Kun arvosanarekisteri on eriytetty omaksi luokakseen, voidaan siihen liittyvä toiminnallisuus poistaa pääohjelmastamme. Pääohjelman muoto on nyt seuraavanlainen.
+ -->
+When the grade register has been separated into a class, we can remove the functionality associated with it from our main program. The main program now looks like this.
 
 ```java
 import java.util.Scanner;
